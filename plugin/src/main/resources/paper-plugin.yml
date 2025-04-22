@@ -1,0 +1,6 @@
+name: LunaverseCore
+version: '1.0-SNAPSHOT'
+main: dev.lunaa.lunaversecore.LunaverseCore
+api-version: '1.21'
+authors: [ lunahd24 ]
+bootstrapper: dev.lunaa.lunaversecore.Bootstrap
