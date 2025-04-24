@@ -5,7 +5,7 @@ import org.reflections.Reflections;
 
 import java.util.Set;
 
-public class ApiInitializer {
+public class ApiServiceInitializer {
 
     public static void initialize() {
         Reflections reflections = new Reflections("dev.lunaa.lunaversecore.api");
@@ -16,7 +16,7 @@ public class ApiInitializer {
                 ApiService service = apiService.getDeclaredConstructor().newInstance();
                 service.initialize();
             } catch (Exception e) {
-                LunaverseCore.getInstance().getPluginLogger().severe("Failed to initialize API service: " + apiService.getName());
+                LunaverseCore.getLunaLogger().error("Failed to initialize API service: " + apiService.getName());
                 e.printStackTrace();
             }
         }
