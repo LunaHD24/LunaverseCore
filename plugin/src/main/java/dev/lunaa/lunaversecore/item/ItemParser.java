@@ -3,7 +3,7 @@ package dev.lunaa.lunaversecore.item;
 import dev.lunaa.lunaversecore.api.attribute.StatValue;
 import dev.lunaa.lunaversecore.api.item.CustomItem;
 import dev.lunaa.lunaversecore.api.attribute.StatType;
-import dev.lunaa.lunaversecore.util.ItemUtils;
+import dev.lunaa.lunaversecore.common.ItemUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;

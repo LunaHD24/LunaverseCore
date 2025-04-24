@@ -1,6 +1,6 @@
 package dev.lunaa.lunaversecore.api.item;
 
-import dev.lunaa.lunaversecore.LunaverseCore;
+import dev.lunaa.lunaversecore.LunaverseApi;
 import dev.lunaa.lunaversecore.api.attribute.StatType;
 import dev.lunaa.lunaversecore.api.attribute.StatValue;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 public interface CustomItem extends RegistryEntry {
 
-    NamespacedKey ITEM_ID_KEY = new NamespacedKey(LunaverseCore.NAMESPACE, "item_id");
-    NamespacedKey ITEM_STATS_KEY = new NamespacedKey(LunaverseCore.NAMESPACE, "item_stats");
+    NamespacedKey ITEM_ID_KEY = new NamespacedKey(LunaverseApi.getNamespace(), "item_id");
+    NamespacedKey ITEM_STATS_KEY = new NamespacedKey(LunaverseApi.getNamespace(), "item_stats");
 
 
     Material getMaterial();

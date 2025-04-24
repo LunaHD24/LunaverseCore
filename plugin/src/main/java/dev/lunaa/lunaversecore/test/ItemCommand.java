@@ -16,6 +16,7 @@ import java.util.Optional;
 
 public class ItemCommand {
 
+    @SuppressWarnings("UnstableApiUsage")
     public static LiteralArgumentBuilder<CommandSourceStack> giveNode = Commands.literal("giveitem")
             .then(Commands.argument("item", StringArgumentType.string())
                     .executes(ctx -> {
