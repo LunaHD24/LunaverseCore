@@ -1,4 +1,4 @@
-package dev.lunaa.lunaversecore.util;
+package dev.lunaa.lunaversecore.common;
 
 import dev.lunaa.lunaversecore.LunaverseCore;
 import dev.lunaa.lunaversecore.api.attribute.StatValue;
