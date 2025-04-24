@@ -1,5 +1,6 @@
 package dev.lunaa.lunaversecore.registry;
 
+import dev.lunaa.lunaversecore.LunaverseCore;
 import dev.lunaa.lunaversecore.api.registry.Registry;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import org.bukkit.NamespacedKey;
@@ -27,10 +28,13 @@ public class RegistryImpl<T extends RegistryEntry> implements Registry<T> {
     public boolean register(T entry, boolean overwrite) {
         NamespacedKey key = entry.getKey();
         System.out.println("Registered " + entry.getKey());
-        if (!overwrite && registeredEntries.containsKey(key)) return false;
+        if (!overwrite && registeredEntries.containsKey(key)) {
+            LunaverseCore.getLunaLogger().debug("Duplicate: Entry with key " + key + " already registered - ignoring");
+            return false;
+        }
         boolean overwritten = registeredEntries.containsKey(key);
         registeredEntries.put(key, entry);
-        System.out.println(registeredEntries);
+        LunaverseCore.getLunaLogger().debug("Registered " + entry.getClass().getSimpleName() + " " + entry.getKey());
         return overwritten;
     }
 }
