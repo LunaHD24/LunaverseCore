@@ -32,7 +32,6 @@ public final class LunaverseCore extends JavaPlugin {
         lunaLogger = new LunaLogger(logger);
         translator.defaultLocale(Locale.ENGLISH);
 
-        ApiInitializer.initialize();
         loadConfig();
         ApiServiceInitializer.initialize();
         initializeApi();
