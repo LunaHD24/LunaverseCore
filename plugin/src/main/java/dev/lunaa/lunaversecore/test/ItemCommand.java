@@ -25,7 +25,7 @@ public class ItemCommand {
                         System.out.println("Entry empty: " + entryOptional.isEmpty());
                         RegistryEntry entry = entryOptional.get();
                         System.out.println("Entry key: " + entry.getKey());
-                        player.getInventory().addItem(ItemParser.getItem( (CustomItem) entry));
+                        player.getInventory().addItem(ItemParser.getItem( (CustomItem) entry, player.locale()));
 
                         return Command.SINGLE_SUCCESS;
                     })

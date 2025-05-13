@@ -1,11 +1,13 @@
 package dev.lunaa.lunaversecore;
 
 import dev.lunaa.lunaversecore.api.common.logging.Logger;
+import dev.lunaa.lunaversecore.api.translation.Translator;
 
 public class LunaverseApi {
 
     private static String NAMESPACE;
     private static Logger logger;
+    private static Translator translator;
 
     public static Logger getLogger() {
         return logger;
@@ -23,4 +25,11 @@ public class LunaverseApi {
         NAMESPACE = namespace;
     }
 
+    public static Translator getTranslator() {
+        return translator;
+    }
+
+    protected static void setTranslator(Translator translator) {
+        LunaverseApi.translator = translator;
+    }
 }

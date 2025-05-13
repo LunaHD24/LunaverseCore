@@ -26,11 +26,11 @@ public class LunaLogger implements dev.lunaa.lunaversecore.api.common.logging.Lo
 
         switch (level) {
             case DEV -> {
-                if (!LunaverseCore.isInDevelopmentMode()) logLevel = Level.FINE;
+                if (!LunaverseCore.isInDevelopmentMode()) return;
                 colorPrefix = "\u001B[38;5;33m";
             }
             case DEBUG -> {
-                if (!LunaverseCore.isInDebugMode()) logLevel = Level.FINE;
+                if (!LunaverseCore.isInDebugMode()) return;
                 colorPrefix = "\u001B[38;5;135m";
             }
             case WARN -> {

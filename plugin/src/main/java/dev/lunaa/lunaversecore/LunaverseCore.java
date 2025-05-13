@@ -1,14 +1,20 @@
 package dev.lunaa.lunaversecore;
 
+import com.google.gson.Gson;
 import dev.lunaa.lunaversecore.api.ApiServiceInitializer;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import dev.lunaa.lunaversecore.common.logging.LunaLogger;
 import dev.lunaa.lunaversecore.registry.RegistryImpl;
+import dev.lunaa.lunaversecore.translation.TranslatorImpl;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.translation.TranslationRegistry;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.translation.TranslationStore;
+import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 public final class LunaverseCore extends JavaPlugin {
@@ -16,10 +22,11 @@ public final class LunaverseCore extends JavaPlugin {
     private static LunaverseCore instance;
     private static Logger logger;
     private static LunaLogger lunaLogger;
+    private static TranslatorImpl translator;
+    private static Gson gson;
+
     private static boolean developmentMode = false;
     private static boolean debugMode = false;
-
-    private static final TranslationRegistry translator = TranslationRegistry.create(Key.key("lunaversecore:lang"));
     public static final RegistryImpl<RegistryEntry> registry = new RegistryImpl<>();
 
     private static final String NAMESPACE = "lunaverse";
@@ -30,16 +37,19 @@ public final class LunaverseCore extends JavaPlugin {
         instance = this;
         logger = Logger.getLogger("LunaverseCore");
         lunaLogger = new LunaLogger(logger);
-        translator.defaultLocale(Locale.ENGLISH);
+        translator = new TranslatorImpl(Locale.US, Key.key(NAMESPACE, "translations"));
+        gson = new Gson();
 
         loadConfig();
-        ApiServiceInitializer.initialize();
+        loadDefaultTranslations();
         initializeApi();
     }
 
     private void initializeApi() {
-        LunaverseApi.setLogger(lunaLogger);
         LunaverseApi.setNamespace(NAMESPACE);
+        LunaverseApi.setLogger(lunaLogger);
+        LunaverseApi.setTranslator(translator);
+        ApiServiceInitializer.initialize();
     }
 
     private void loadConfig() {
@@ -47,6 +57,15 @@ public final class LunaverseCore extends JavaPlugin {
         reloadConfig();
         if (getConfig().getBoolean("development-mode")) developmentMode = true;
         if (getConfig().getBoolean("debug-mode")) debugMode = true;
+    }
+
+    private void loadDefaultTranslations() {
+        TranslationStore<Component> translationStore = translator.getTranslationStore();
+        ResourceBundle bundle = ResourceBundle.getBundle("lang.default_lang", Locale.US, UTF8ResourceBundleControl.get());
+
+        for (String key : bundle.keySet()) {
+            translationStore.register(key, Locale.US, Component.text(bundle.getString(key)).decoration(TextDecoration.ITALIC, false));
+        }
     }
 
 
@@ -70,7 +89,7 @@ public final class LunaverseCore extends JavaPlugin {
         return registry;
     }
 
-    public static TranslationRegistry getTranslator() {
+    public static TranslatorImpl getTranslator() {
         return translator;
     }
 

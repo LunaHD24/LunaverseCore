@@ -27,14 +27,25 @@ public class RegistryImpl<T extends RegistryEntry> implements Registry<T> {
     @Override
     public boolean register(T entry, boolean overwrite) {
         NamespacedKey key = entry.getKey();
-        System.out.println("Registered " + entry.getKey());
         if (!overwrite && registeredEntries.containsKey(key)) {
             LunaverseCore.getLunaLogger().debug("Duplicate: Entry with key " + key + " already registered - ignoring");
             return false;
         }
         boolean overwritten = registeredEntries.containsKey(key);
+
         registeredEntries.put(key, entry);
-        LunaverseCore.getLunaLogger().debug("Registered " + entry.getClass().getSimpleName() + " " + entry.getKey());
+
+        LunaverseCore.getLunaLogger().debug("Registered " + getRegistryEntryType(entry).getSimpleName() + " " + entry.getKey());
         return overwritten;
     }
+
+    private Class<? extends RegistryEntry> getRegistryEntryType(RegistryEntry entry) {
+        for (Class<?> iface : entry.getClass().getInterfaces()) {
+            if (RegistryEntry.class.isAssignableFrom(iface) && !iface.equals(RegistryEntry.class)) {
+                return iface.asSubclass(RegistryEntry.class);
+            }
+        }
+        return RegistryEntry.class;
+    }
+
 }

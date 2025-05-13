@@ -7,14 +7,14 @@ public enum ValueModifier {
     MULTIPLY('x');
 
 
-    private final char character;
+    private final char symbol;
 
-    ValueModifier(char character) {
-        this.character = character;
+    ValueModifier(char symbol) {
+        this.symbol = symbol;
     }
 
-    public char getCharacter() {
-        return character;
+    public char getSymbol() {
+        return this.symbol;
     }
 
 }
