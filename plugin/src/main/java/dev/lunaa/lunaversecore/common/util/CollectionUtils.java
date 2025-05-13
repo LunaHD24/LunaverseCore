@@ -1,4 +1,4 @@
-package dev.lunaa.lunaversecore.common;
+package dev.lunaa.lunaversecore.common.util;
 
 import java.util.Collection;
 
