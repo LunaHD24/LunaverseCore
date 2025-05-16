@@ -12,4 +12,7 @@ public record StatValue(float value, ValueModifier modifier, ValueFormat format)
         return modifier == ValueModifier.ADD;
     }
 
+    public String serialize() {
+        return String.format("%s;%s;%s", modifier.getSymbol(), value, format.name());
+    }
 }
