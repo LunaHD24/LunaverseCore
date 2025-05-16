@@ -17,4 +17,13 @@ public enum ValueModifier {
         return this.symbol;
     }
 
+    public static ValueModifier fromSymbol(char symbol) {
+        for (ValueModifier modifier : values()) {
+            if (modifier.getSymbol() == symbol) {
+                return modifier;
+            }
+        }
+        return null;
+    }
+
 }
