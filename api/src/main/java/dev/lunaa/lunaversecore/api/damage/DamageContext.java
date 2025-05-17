@@ -1,6 +1,6 @@
 package dev.lunaa.lunaversecore.api.damage;
 
-import dev.lunaa.lunaversecore.api.item.CustomItem;
+import dev.lunaa.lunaversecore.api.item.base.CustomItemBase;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
@@ -14,7 +14,7 @@ public interface DamageContext {
 
     double getDamage();
 
-    CustomItem getAttackItem();
+    CustomItemBase getAttackItem();
 
     default boolean isFatal() {
         if (!(getVictim() instanceof LivingEntity livingEntity)) return false;

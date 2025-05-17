@@ -1,4 +1,4 @@
-package dev.lunaa.lunaversecore.api.item;
+package dev.lunaa.lunaversecore.api.item.base;
 
 import dev.lunaa.lunaversecore.api.attribute.StatType;
 import dev.lunaa.lunaversecore.api.attribute.StatValue;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface CustomItem extends RegistryEntry {
+public interface CustomItemBase extends RegistryEntry {
 
     Material getMaterial();
 
@@ -22,5 +22,7 @@ public interface CustomItem extends RegistryEntry {
     }
 
     Map<StatType, StatValue> getStats();
+
+    void setStats(Map<StatType, StatValue> stats);
 
 }
