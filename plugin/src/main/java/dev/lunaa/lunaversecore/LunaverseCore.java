@@ -61,7 +61,7 @@ public final class LunaverseCore extends JavaPlugin {
 
     private void loadDefaultTranslations() {
         TranslationStore<Component> translationStore = translator.getTranslationStore();
-        ResourceBundle bundle = ResourceBundle.getBundle("lang.default_lang", Locale.US, UTF8ResourceBundleControl.get());
+        ResourceBundle bundle = ResourceBundle.getBundle("lang.default_lang.Bundle", Locale.US, UTF8ResourceBundleControl.get());
 
         for (String key : bundle.keySet()) {
             translationStore.register(key, Locale.US, Component.text(bundle.getString(key)).decoration(TextDecoration.ITALIC, false));
@@ -91,6 +91,10 @@ public final class LunaverseCore extends JavaPlugin {
 
     public static TranslatorImpl getTranslator() {
         return translator;
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 
     public static boolean isInDevelopmentMode() {

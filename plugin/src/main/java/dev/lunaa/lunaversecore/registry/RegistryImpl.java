@@ -1,6 +1,7 @@
 package dev.lunaa.lunaversecore.registry;
 
 import dev.lunaa.lunaversecore.LunaverseCore;
+import dev.lunaa.lunaversecore.api.item.AbstractCustomItem;
 import dev.lunaa.lunaversecore.api.registry.Registry;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import org.bukkit.NamespacedKey;
@@ -16,7 +17,8 @@ public class RegistryImpl<T extends RegistryEntry> implements Registry<T> {
     @Override
     @SuppressWarnings("unchecked")
     public Optional<T> get(NamespacedKey key) {
-        return Optional.of((T) registeredEntries.get(key).clone());
+        if (!registeredEntries.containsKey(key)) return Optional.empty();
+        return Optional.of((T) registeredEntries.get(key).copy());
     }
 
     @Override
@@ -45,6 +47,7 @@ public class RegistryImpl<T extends RegistryEntry> implements Registry<T> {
                 return iface.asSubclass(RegistryEntry.class);
             }
         }
+        if (entry instanceof AbstractCustomItem) return AbstractCustomItem.class;
         return RegistryEntry.class;
     }
 

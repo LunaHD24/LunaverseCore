@@ -10,7 +10,7 @@ public class Bootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            commands.registrar().register(ItemCommand.giveNode.build());
+            commands.registrar().register(ItemCommand.rootNode.build());
         });
     }
 }

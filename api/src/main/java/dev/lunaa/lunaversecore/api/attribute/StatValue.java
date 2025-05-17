@@ -13,6 +13,13 @@ public record StatValue(float value, ValueModifier modifier, ValueFormat format)
     }
 
     public String serialize() {
-        return String.format("%s;%s;%s", modifier.getSymbol(), value, format.name());
+        return String.format("%s;%s;%s", value, modifier.getSymbol(), format.name());
+    }
+
+    public String ofString() {
+        StringBuilder valueString = new StringBuilder(String.valueOf(value));
+        if (format == ValueFormat.PERCENTAGE) valueString.append("%");
+        valueString.insert(0, modifier.getSymbol());
+        return valueString.toString();
     }
 }

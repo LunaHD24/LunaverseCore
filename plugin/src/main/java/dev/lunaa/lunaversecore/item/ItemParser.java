@@ -1,8 +1,10 @@
 package dev.lunaa.lunaversecore.item;
 
+import dev.lunaa.lunaversecore.LunaverseCore;
 import dev.lunaa.lunaversecore.api.attribute.StatValue;
-import dev.lunaa.lunaversecore.api.item.CustomItem;
+import dev.lunaa.lunaversecore.api.item.base.CustomItemBase;
 import dev.lunaa.lunaversecore.api.attribute.StatType;
+import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import dev.lunaa.lunaversecore.common.PersistentDataKey;
 import dev.lunaa.lunaversecore.common.util.ItemUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -11,6 +13,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -21,7 +24,7 @@ import java.util.*;
 public class ItemParser {
 
     @SuppressWarnings("UnstableApiUsage")
-    public static ItemStack getItem(CustomItem customItem, Locale locale) {
+    public static ItemStack getItem(CustomItemBase customItem, Locale locale) {
         ItemStack item = new ItemStack(customItem.getMaterial());
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -43,17 +46,18 @@ public class ItemParser {
         Map<StatType, StatValue> stats = customItem.getStats();
         for (StatType itemStatType : stats.keySet()) {
             StatValue statValue = stats.get(itemStatType);
-            String valueText = String.valueOf(statValue.modifier().getSymbol()) + statValue.value();
 
             lore.add(
                     GlobalTranslator.render(Component.translatable(itemStatType.getTranslationKey()), locale).color(NamedTextColor.GRAY)
                             .append(Component.text(": ").color(NamedTextColor.GRAY))
-                            .append(Component.text(valueText).color(statValue.isPositive() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                            .append(Component.text(statValue.ofString()).color(statValue.isPositive() ? NamedTextColor.GREEN : NamedTextColor.RED))
                             .append(itemStatType.getCharacterComponent())
                             .decoration(TextDecoration.ITALIC, false)
             );
         }
-        container.set(PersistentDataKey.ITEM_STATS_KEY, PersistentDataType.LIST.strings(), ItemUtils.serializeStats(stats));
+        List<String> serializedStats = ItemUtils.serializeStats(stats);
+        LunaverseCore.getLunaLogger().dev("Serialized stats: " + serializedStats);
+        container.set(PersistentDataKey.ITEM_STATS_KEY, PersistentDataType.LIST.strings(), serializedStats);
 
         item.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes().showInTooltip(false).build());
 
@@ -63,8 +67,16 @@ public class ItemParser {
         return item;
     }
 
-    public static Optional<CustomItem> getFrom(ItemStack item) {
-        return Optional.empty();
+    public static Optional<CustomItemBase> getFrom(ItemStack item) {
+        if (!ItemUtils.isRegistered(item)) return Optional.empty();
+        NamespacedKey itemKey = ItemUtils.getKey(item).get();
+        RegistryEntry entry = LunaverseCore.getRegistry().get(itemKey).get();
+        if (!(entry instanceof CustomItemBase customItem)) return Optional.empty();
+
+        Optional<Map<StatType, StatValue>> statsOptional = ItemUtils.getStats(item);
+        statsOptional.ifPresent(customItem::setStats);
+
+        return Optional.of(customItem);
     }
 
 }

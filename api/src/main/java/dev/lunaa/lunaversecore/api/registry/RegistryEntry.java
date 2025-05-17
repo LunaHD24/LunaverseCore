@@ -15,6 +15,6 @@ public interface RegistryEntry extends Keyed {
     @Override
     @NotNull NamespacedKey getKey();
 
-    RegistryEntry clone();
+    RegistryEntry copy();
 
 }
