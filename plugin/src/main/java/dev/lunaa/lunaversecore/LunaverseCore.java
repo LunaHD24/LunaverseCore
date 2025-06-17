@@ -1,7 +1,6 @@
 package dev.lunaa.lunaversecore;
 
 import com.google.gson.Gson;
-import dev.lunaa.lunaversecore.api.ApiServiceInitializer;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import dev.lunaa.lunaversecore.common.logging.LunaLogger;
 import dev.lunaa.lunaversecore.registry.RegistryImpl;
@@ -27,6 +26,7 @@ public final class LunaverseCore extends JavaPlugin {
 
     private static boolean developmentMode = false;
     private static boolean debugMode = false;
+
     public static final RegistryImpl<RegistryEntry> registry = new RegistryImpl<>();
 
     private static final String NAMESPACE = "lunaverse";
@@ -47,9 +47,9 @@ public final class LunaverseCore extends JavaPlugin {
 
     private void initializeApi() {
         LunaverseApi.setNamespace(NAMESPACE);
+        LunaverseApi.setRegistry(registry);
         LunaverseApi.setLogger(lunaLogger);
         LunaverseApi.setTranslator(translator);
-        ApiServiceInitializer.initialize();
     }
 
     private void loadConfig() {
