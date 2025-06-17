@@ -1,13 +1,24 @@
 package dev.lunaa.lunaversecore;
 
 import dev.lunaa.lunaversecore.api.common.logging.Logger;
+import dev.lunaa.lunaversecore.api.registry.Registry;
+import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import dev.lunaa.lunaversecore.api.translation.Translator;
 
 public class LunaverseApi {
 
     private static String NAMESPACE;
+    private static Registry<RegistryEntry> registry;
     private static Logger logger;
     private static Translator translator;
+
+    public static Registry<RegistryEntry> getRegistry() {
+        return registry;
+    }
+
+    protected static void setRegistry(Registry<RegistryEntry> registry) {
+        LunaverseApi.registry = registry;
+    }
 
     public static Logger getLogger() {
         return logger;
