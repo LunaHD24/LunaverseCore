@@ -4,8 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import dev.lunaa.lunaversecore.LunaverseCore;
-import dev.lunaa.lunaversecore.api.attribute.StatType;
-import dev.lunaa.lunaversecore.api.attribute.StatValue;
+import dev.lunaa.lunaversecore.api.attribute.StatEntry;
 import dev.lunaa.lunaversecore.api.item.base.CustomItemBase;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import dev.lunaa.lunaversecore.common.util.ItemUtils;
@@ -17,8 +16,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ItemCommand {
@@ -28,12 +27,12 @@ public class ItemCommand {
         if (customItem == null) return Component.text("Not a custom item");
         Component infoComponent = Component.text("Key: " + customItem.getKey());
 
-        Optional<Map<StatType, StatValue>> statsOptional = ItemUtils.getStats(item);
+        Optional<Set<StatEntry>> statsOptional = ItemUtils.getStats(item);
         if (statsOptional.isEmpty()) return infoComponent;
         infoComponent = infoComponent.appendNewline().append(Component.text("Stats:"));
 
-        for (StatType statType : statsOptional.get().keySet()) {
-            infoComponent = infoComponent.appendNewline().append(Component.text("- " + statType.getKey() + " : " + statsOptional.get().get(statType).ofString()));
+        for (StatEntry entry : statsOptional.get()) {
+            infoComponent = infoComponent.appendNewline().append(Component.text("- " + entry.type().getKey() + " : " + entry.value().ofString()));
         }
 
         return infoComponent;
