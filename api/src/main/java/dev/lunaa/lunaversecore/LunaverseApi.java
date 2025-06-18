@@ -12,8 +12,8 @@ public class LunaverseApi {
     private static Logger logger;
     private static Translator translator;
 
-    public static Registry<RegistryEntry> getRegistry() {
-        return registry;
+    public static <T extends RegistryEntry> Registry<T> getRegistry() {
+        return (Registry<T>) registry;
     }
 
     protected static void setRegistry(Registry<RegistryEntry> registry) {
