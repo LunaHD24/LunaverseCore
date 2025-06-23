@@ -1,13 +1,12 @@
 package dev.lunaa.lunaversecore.api.item.base;
 
-import dev.lunaa.lunaversecore.api.attribute.StatType;
-import dev.lunaa.lunaversecore.api.attribute.StatValue;
+import dev.lunaa.lunaversecore.api.attribute.StatEntry;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import org.bukkit.Material;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CustomItemBase extends RegistryEntry {
 
@@ -21,8 +20,8 @@ public interface CustomItemBase extends RegistryEntry {
         return Optional.empty();
     }
 
-    Map<StatType, StatValue> getStats();
+    Set<StatEntry> getStats();
 
-    void setStats(Map<StatType, StatValue> stats);
+    void setStats(Set<StatEntry> stats);
 
 }

@@ -12,10 +12,6 @@ public record StatValue(float value, ValueModifier modifier, ValueFormat format)
         return modifier == ValueModifier.ADD;
     }
 
-    public String serialize() {
-        return String.format("%s;%s;%s", value, modifier.getSymbol(), format.name());
-    }
-
     public String ofString() {
         StringBuilder valueString = new StringBuilder(String.valueOf(value));
         if (format == ValueFormat.PERCENTAGE) valueString.append("%");

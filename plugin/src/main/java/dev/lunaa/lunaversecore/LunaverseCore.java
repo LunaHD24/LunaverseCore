@@ -3,6 +3,7 @@ package dev.lunaa.lunaversecore;
 import com.google.gson.Gson;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
 import dev.lunaa.lunaversecore.common.logging.LunaLogger;
+import dev.lunaa.lunaversecore.entity.EntityManager;
 import dev.lunaa.lunaversecore.registry.RegistryImpl;
 import dev.lunaa.lunaversecore.translation.TranslatorImpl;
 import net.kyori.adventure.key.Key;
@@ -23,6 +24,7 @@ public final class LunaverseCore extends JavaPlugin {
     private static LunaLogger lunaLogger;
     private static TranslatorImpl translator;
     private static Gson gson;
+    private static EntityManager entitySpawnManager;
 
     private static boolean developmentMode = false;
     private static boolean debugMode = false;
@@ -39,6 +41,7 @@ public final class LunaverseCore extends JavaPlugin {
         lunaLogger = new LunaLogger(logger);
         translator = new TranslatorImpl(Locale.US, Key.key(NAMESPACE, "translations"));
         gson = new Gson();
+        entitySpawnManager = new EntityManager();
 
         loadConfig();
         loadDefaultTranslations();
@@ -95,6 +98,10 @@ public final class LunaverseCore extends JavaPlugin {
 
     public static Gson getGson() {
         return gson;
+    }
+
+    public static EntityManager getEntitySpawnManager() {
+        return entitySpawnManager;
     }
 
     public static boolean isInDevelopmentMode() {

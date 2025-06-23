@@ -1,6 +1,7 @@
 package dev.lunaa.lunaversecore.common.util;
 
 import dev.lunaa.lunaversecore.LunaverseCore;
+import dev.lunaa.lunaversecore.api.attribute.StatEntry;
 import dev.lunaa.lunaversecore.api.attribute.StatType;
 import dev.lunaa.lunaversecore.api.attribute.StatValue;
 import dev.lunaa.lunaversecore.api.common.ValueFormat;
@@ -59,7 +60,7 @@ public class ItemUtils {
         return true;
     }
 
-    public static Optional<Map<StatType, StatValue>> getStats(ItemStack item) {
+    public static Optional<Set<StatEntry>> getStats(ItemStack item) {
         if (!isCustomItem(item)) return Optional.empty();
         if (!hasStats(item)) return Optional.empty();
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
@@ -76,18 +77,16 @@ public class ItemUtils {
      * @param stats The stats to serialize.
      * @return The serialized stats.
      */
-    public static List<String> serializeStats(Map<StatType, StatValue> stats) {
+    public static List<String> serializeStats(Set<StatEntry> stats) {
         List<String> serializedStats = new ArrayList<>();
-
-        for (StatType statType : stats.keySet()) {
-            StatValue statValue = stats.get(statType);
-            serializedStats.add(String.format("%s;%s", statType.getKey(), statValue.serialize()));
+        for (StatEntry entry : stats) {
+            serializedStats.add(entry.serialize());
         }
         return serializedStats;
     }
 
-    public static Map<StatType, StatValue> deserializeStats(List<String> serializedStats) {
-        Map<StatType, StatValue> deserializedStats = new HashMap<>();
+    public static Set<StatEntry> deserializeStats(List<String> serializedStats) {
+        Set<StatEntry> deserializedStats = new HashSet<>();
 
         for (String serializedStat : serializedStats) {
             String[] statParts = serializedStat.split(";");
@@ -109,7 +108,7 @@ public class ItemUtils {
             }
 
             try {
-                deserializedStats.put(statType, new StatValue(Float.parseFloat(statParts[1]), ValueModifier.fromSymbol(statParts[2].charAt(0)), ValueFormat.valueOf(statParts[3])));
+                deserializedStats.add(new StatEntry(statType, new StatValue(Float.parseFloat(statParts[1]), ValueModifier.fromSymbol(statParts[2].charAt(0)), ValueFormat.valueOf(statParts[3]))));
             } catch (Exception e) {
                 LunaverseCore.getLunaLogger().warn("Couldn't deserialize stat " + statParts[0] + " (invalid value format)\n" + ExceptionUtils.getFullStackTrace(e));
             }
