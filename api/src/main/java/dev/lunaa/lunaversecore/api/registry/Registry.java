@@ -8,8 +8,16 @@ public interface Registry<T extends RegistryEntry> {
 
     Optional<T> get(NamespacedKey key);
 
-    boolean register(T entry);
+    Optional<T> get(String key);
 
-    boolean register(T entry, boolean overwrite);
+    Optional<NamespacedKey> getKeyFor(T entry);
+
+    boolean register(NamespacedKey key, T entry);
+
+    boolean register(String key, T entry);
+
+    boolean register(NamespacedKey key, T entry, boolean overwrite);
+
+    boolean register(String key, T entry, boolean overwrite);
 
 }

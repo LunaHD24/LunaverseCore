@@ -1,7 +1,6 @@
 package dev.lunaa.lunaversecore.api.entity;
 
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -31,11 +30,6 @@ public class AbstractCustomEntity implements CustomEntity {
     @Override
     public Optional<Consumer<? super Entity>> getSpawnFunction() {
         return Optional.ofNullable(spawnFunction);
-    }
-
-    @Override
-    public @NotNull NamespacedKey getKey() { // TODO: keys not directly in a RegistryEntry, instead registered with the original entry to the registry
-        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package dev.lunaa.lunaversecore.api.attribute;
 
+import dev.lunaa.lunaversecore.LunaverseApi;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -10,7 +11,7 @@ import java.util.Locale;
 public record StatEntry(StatType type, StatValue value) {
 
     public String serialize() {
-        return String.format("%s;%s;%s;%s", type.getKey(), value.value(), value().modifier().getSymbol(), value().format().name());
+        return String.format("%s;%s;%s;%s", LunaverseApi.getRegistry().getKeyFor(type), value.value(), value().modifier().getSymbol(), value().format().name());
     }
 
     public Component readableFormat(Locale locale) {

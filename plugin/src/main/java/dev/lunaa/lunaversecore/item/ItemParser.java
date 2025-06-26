@@ -4,6 +4,7 @@ import dev.lunaa.lunaversecore.LunaverseCore;
 import dev.lunaa.lunaversecore.api.attribute.StatEntry;
 import dev.lunaa.lunaversecore.api.item.base.CustomItemBase;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
+import dev.lunaa.lunaversecore.api.registry.RegistryException;
 import dev.lunaa.lunaversecore.common.PersistentDataKey;
 import dev.lunaa.lunaversecore.common.util.ItemUtils;
 import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -22,7 +23,7 @@ import java.util.*;
 public class ItemParser {
 
     @SuppressWarnings("UnstableApiUsage")
-    public static ItemStack getItem(CustomItemBase customItem, Locale locale) {
+    public static ItemStack getItem(CustomItemBase customItem, Locale locale) throws RegistryException {
         ItemStack item = new ItemStack(customItem.getMaterial());
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -38,7 +39,9 @@ public class ItemParser {
             }
         }
 
-        container.set(PersistentDataKey.ITEM_ID_KEY, PersistentDataType.STRING, customItem.getKey().asString());
+        Optional<NamespacedKey> optionalItemKey = LunaverseCore.getRegistry().getKeyFor(customItem);
+        if (optionalItemKey.isEmpty()) throw new RegistryException("Could not find key for entry " + customItem.getClass().getName());
+        container.set(PersistentDataKey.ITEM_ID_KEY, PersistentDataType.STRING, optionalItemKey.get().asString());
 
         lore.add(Component.text(""));
         Set<StatEntry> stats = customItem.getStats();
@@ -46,7 +49,6 @@ public class ItemParser {
             lore.add(entry.readableFormat(locale));
         }
         List<String> serializedStats = ItemUtils.serializeStats(stats);
-        LunaverseCore.getLunaLogger().dev("Serialized stats: " + serializedStats);
         container.set(PersistentDataKey.ITEM_STATS_KEY, PersistentDataType.LIST.strings(), serializedStats);
 
         item.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes().showInTooltip(false).build());
@@ -57,6 +59,7 @@ public class ItemParser {
         return item;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static Optional<CustomItemBase> getFrom(ItemStack item) {
         if (!ItemUtils.isRegistered(item)) return Optional.empty();
         NamespacedKey itemKey = ItemUtils.getKey(item).get();
