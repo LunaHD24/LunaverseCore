@@ -7,6 +7,7 @@ import dev.lunaa.lunaversecore.LunaverseCore;
 import dev.lunaa.lunaversecore.api.attribute.StatEntry;
 import dev.lunaa.lunaversecore.api.item.base.CustomItemBase;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
+import dev.lunaa.lunaversecore.api.registry.RegistryException;
 import dev.lunaa.lunaversecore.common.util.ItemUtils;
 import dev.lunaa.lunaversecore.item.ItemParser;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -49,7 +50,11 @@ public class ItemCommand {
                     return 0;
                 }
                 RegistryEntry entry = entryOptional.get();
-                player.getInventory().addItem(ItemParser.getItem( (CustomItemBase) entry, player.locale()));
+                try {
+                    player.getInventory().addItem(ItemParser.getItem((CustomItemBase) entry, player.locale()));
+                } catch (RegistryException e) {
+                    LunaverseCore.getLunaLogger().error(e);
+                }
 
                 return Command.SINGLE_SUCCESS;
             })

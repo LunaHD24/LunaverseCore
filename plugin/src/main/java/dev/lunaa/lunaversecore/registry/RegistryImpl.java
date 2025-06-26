@@ -27,7 +27,7 @@ public class RegistryImpl<T extends RegistryEntry> implements Registry<T> {
     }
 
     @Override
-    public Optional<NamespacedKey> getKeyFor(T entry) {;
+    public Optional<NamespacedKey> getKeyFor(T entry) {
         for (Map.Entry<NamespacedKey, T> registeredEntry : registeredEntries.entrySet()) {
             if (registeredEntry.getValue().getClass().getName().equals(entry.getClass().getName())) {
                 return Optional.of(registeredEntry.getKey());
