@@ -31,7 +31,7 @@ public final class LunaverseCore extends JavaPlugin {
 
     public static final RegistryImpl<RegistryEntry> registry = new RegistryImpl<>();
 
-    private static final String NAMESPACE = "lunaverse";
+    private static final String NAMESPACE = "lunaverse_core";
 
 
     @Override

@@ -22,23 +22,48 @@ public class RegistryImpl<T extends RegistryEntry> implements Registry<T> {
     }
 
     @Override
-    public boolean register(T entry) {
-        return register(entry, true);
+    public Optional<T> get(String key) {
+        return get(NamespacedKey.fromString(key));
     }
 
     @Override
-    public boolean register(T entry, boolean overwrite) {
-        NamespacedKey key = entry.getKey();
+    public Optional<NamespacedKey> getKeyFor(T entry) {
+        for (Map.Entry<NamespacedKey, T> registeredEntry : registeredEntries.entrySet()) {
+            if (registeredEntry.getValue().getClass().getName().equals(entry.getClass().getName())) {
+                return Optional.of(registeredEntry.getKey());
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean register(NamespacedKey key, T entry) {
+        return register(key, entry, true);
+    }
+
+    @Override
+    public boolean register(String key, T entry) {
+        return register(NamespacedKey.fromString(key), entry);
+    }
+
+    @Override
+    public boolean register(NamespacedKey key, T entry, boolean overwrite) {
         if (!overwrite && registeredEntries.containsKey(key)) {
             LunaverseCore.getLunaLogger().debug("Duplicate: Entry with key " + key + " already registered - ignoring");
             return false;
         }
         boolean overwritten = registeredEntries.containsKey(key);
+        if (overwritten) LunaverseCore.getLunaLogger().debug("Duplicate: Entry with key " + key + " already registered - overwriting");
 
         registeredEntries.put(key, entry);
 
-        LunaverseCore.getLunaLogger().debug("Registered " + getRegistryEntryType(entry).getSimpleName() + " " + entry.getKey());
+        LunaverseCore.getLunaLogger().debug("Registered " + entry.getClass().getSimpleName() + " " + key.asString());
         return overwritten;
+    }
+
+    @Override
+    public boolean register(String key, T entry, boolean overwrite) {
+        return register(NamespacedKey.fromString(key), entry, overwrite);
     }
 
     private Class<? extends RegistryEntry> getRegistryEntryType(RegistryEntry entry) {

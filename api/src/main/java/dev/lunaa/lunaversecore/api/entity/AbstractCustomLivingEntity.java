@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+@SuppressWarnings("UnstableApiUsage")
 public abstract class AbstractCustomLivingEntity extends AbstractCustomEntity implements CustomLivingEntity {
 
     private final double maxHealth;

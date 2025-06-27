@@ -7,6 +7,7 @@ import dev.lunaa.lunaversecore.LunaverseCore;
 import dev.lunaa.lunaversecore.api.attribute.StatEntry;
 import dev.lunaa.lunaversecore.api.item.base.CustomItemBase;
 import dev.lunaa.lunaversecore.api.registry.RegistryEntry;
+import dev.lunaa.lunaversecore.api.registry.RegistryException;
 import dev.lunaa.lunaversecore.common.util.ItemUtils;
 import dev.lunaa.lunaversecore.item.ItemParser;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -25,14 +26,15 @@ public class ItemCommand {
     private static Component getItemInfo(ItemStack item) {
         CustomItemBase customItem = ItemParser.getFrom(item).orElse(null);
         if (customItem == null) return Component.text("Not a custom item");
-        Component infoComponent = Component.text("Key: " + customItem.getKey());
-
+        Component infoComponent = Component.text("Key: " + LunaverseCore.getRegistry().getKeyFor(customItem).orElse(new NamespacedKey(LunaverseCore.getNamespace(), "invalid_key")).asString());
         Optional<Set<StatEntry>> statsOptional = ItemUtils.getStats(item);
         if (statsOptional.isEmpty()) return infoComponent;
         infoComponent = infoComponent.appendNewline().append(Component.text("Stats:"));
 
         for (StatEntry entry : statsOptional.get()) {
-            infoComponent = infoComponent.appendNewline().append(Component.text("- " + entry.type().getKey() + " : " + entry.value().ofString()));
+            infoComponent = infoComponent.appendNewline().append(
+                    Component.text("- " + LunaverseCore.getRegistry().getKeyFor(entry.type()).orElse(new NamespacedKey(LunaverseCore.getNamespace(), "invalid_key")).asString() + " : " + entry.value().ofString())
+            );
         }
 
         return infoComponent;
@@ -48,7 +50,11 @@ public class ItemCommand {
                     return 0;
                 }
                 RegistryEntry entry = entryOptional.get();
-                player.getInventory().addItem(ItemParser.getItem( (CustomItemBase) entry, player.locale()));
+                try {
+                    player.getInventory().addItem(ItemParser.getItem((CustomItemBase) entry, player.locale()));
+                } catch (RegistryException e) {
+                    LunaverseCore.getLunaLogger().error(e);
+                }
 
                 return Command.SINGLE_SUCCESS;
             })
